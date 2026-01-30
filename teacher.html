@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>หน้าครู</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<header>👩‍🏫 ระบบตรวจสอบการทุจริต</header>
+
+<div class="container">
+
+<div class="card">
+  <input id="formLink" placeholder="วางลิงก์ Google Form (ลิงก์ปกติ)">
+  <br><br>
+  <button onclick="generateLink()">สร้างลิงก์สำหรับนักเรียน</button>
+  <br><br>
+  <div id="examLink"></div>
+</div>
+
+<div class="card">
+  <button onclick="resetAll()">🔄 รีเซ็ทรายชื่อนักเรียนทั้งหมด</button>
+</div>
+
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>ชื่อ</th>
+        <th>ทุจริต</th>
+        <th>สถานะ</th>
+        <th>ลบ</th>
+      </tr>
+    </thead>
+    <tbody id="list"></tbody>
+  </table>
+</div>
+
+</div>
+
+<script>
+let students = JSON.parse(localStorage.getItem("students") || "{}")
+
+function generateLink(){
+  const form = document.getElementById("formLink").value.trim()
+  if(!form){
+    alert("กรุณาใส่ลิงก์ Google Form")
+    return
+  }
+
+  // ⭐ วิธีที่ถูกต้องสำหรับ GitHub Pages (กัน 404)
+  const base =
+    location.origin + location.pathname.replace(/\/[^\/]*$/, "/")
+
+  const examURL =
+    base + "exam.html?form=" + encodeURIComponent(form)
+
+  document.getElementById("examLink").innerHTML = `
+    <b>ลิงก์สำหรับนักเรียน:</b>
+    <textarea>${examURL}</textarea>
+  `
+}
+
+function render(){
+  const tb = document.getElementById("list")
+  tb.innerHTML = ""
+  Object.keys(students).forEach(n=>{
+    tb.innerHTML += `
+      <tr>
+        <td>${n}</td>
+        <td class="${students[n]>0?'alert':'ok'}">${students[n]}</td>
+        <td>${students[n]>0?'⚠️ ทุจริต':'✔ ปกติ'}</td>
+        <td><button onclick="removeName('${n}')">❌</button></td>
+      </tr>
+    `
+  })
+}
+
+function removeName(n){
+  delete students[n]
+  save()
+}
+
+function resetAll(){
+  if(confirm("ลบข้อมูลนักเรียนทั้งหมด?")){
+    students = {}
+    save()
+  }
+}
+
+function save(){
+  localStorage.setItem("students", JSON.stringify(students))
+  render()
+}
+
+render()
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Sarabun', sans-serif;
+    background: #f4f6f9;
+}
+
+header {
+    background: linear-gradient(135deg,#1e3c72,#2a5298);
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-size: 1.3em;
+}
+
+.container {
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,.08);
+}
+
+input, button {
+    padding: 12px;
+    width: 100%;
+    font-size: 1em;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+button {
+    background: #2a5298;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: .9;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background: #2a5298;
+    color: white;
+}
+
+.alert {
+    color: red;
+    font-weight: bold;
+}
+
+.ok {
+    color: green;
+}
+
+/* 📱 Mobile */
+@media (max-width: 600px) {
+    header {
+        font-size: 1.1em;
+    }
+    table {
+        font-size: 0.85em;
+    }
+}

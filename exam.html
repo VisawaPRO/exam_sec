@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ทำแบบทดสอบ</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<header>📝 ทำแบบทดสอบ</header>
+
+<div class="container">
+
+<div class="card">
+  <input id="name" placeholder="กรอกชื่อ-นามสกุล">
+  <br><br>
+  <button onclick="startExam()">เริ่มทำข้อสอบ</button>
+</div>
+
+<div class="card" id="examBox" style="display:none;height:80vh">
+  <iframe id="form" style="width:100%;height:100%;border:none"></iframe>
+</div>
+
+</div>
+
+<script>
+const params = new URLSearchParams(location.search)
+const formLink = params.get("form")
+
+let students = JSON.parse(localStorage.getItem("students") || "{}")
+let current = ""
+let started = false
+
+function startExam(){
+  current = document.getElementById("name").value.trim()
+  if(!current || !formLink){
+    alert("ข้อมูลไม่ครบ")
+    return
+  }
+
+  if(!students[current]) students[current] = 0
+  save()
+
+  document.getElementById("examBox").style.display = "block"
+  document.getElementById("form").src = formLink
+
+  started = true
+  startAntiCheat()
+}
+
+function cheat(){
+  if(!started) return
+  students[current]++
+  save()
+  alert("⚠️ ตรวจพบการสลับหน้าจอ")
+}
+
+function startAntiCheat(){
+  document.addEventListener("visibilitychange",()=>{
+    if(document.hidden) cheat()
+  })
+
+  window.addEventListener("blur",()=>{
+    setTimeout(()=>{
+      if(document.activeElement.tagName !== "IFRAME"){
+        cheat()
+      }
+    },300)
+  })
+}
+
+function save(){
+  localStorage.setItem("students", JSON.stringify(students))
+}
+</script>
+</body>
+</html>
